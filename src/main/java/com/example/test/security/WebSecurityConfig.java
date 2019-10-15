@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.test.security;
 
 import com.example.test.svc.CustomUserDetails;
 import lombok.val;
@@ -20,10 +20,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
+    private CustomUserDetails customUserDetails;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
+        auth.userDetailsService(customUserDetails).passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -32,23 +33,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    public AuthenticationProvider authenticationProvider() {
-        val provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(new CustomUserDetails());
-        provider.setPasswordEncoder(passwordEncoder);
-        return provider;
-    }
-
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        // @formatter:off
-        http.authorizeRequests().antMatchers("/login").permitAll()
-                .antMatchers("/oauth/token/revokeById/**").permitAll()
-                .antMatchers("/tokens/**").permitAll()
+        http.authorizeRequests()
                 .anyRequest().authenticated()
-                .and().formLogin().permitAll()
                 .and().csrf().disable();
-        // @formatter:on
     }
 
 }

@@ -30,7 +30,7 @@ public class CustomUserDetails implements UserDetailsService {
                 Arrays.asList(new SimpleGrantedAuthority("AUTH_1"), new SimpleGrantedAuthority("AUTH_2")),
                 "test_email",
                 "test_phone"
-                );
+        );
 
         return userDetails;
     }

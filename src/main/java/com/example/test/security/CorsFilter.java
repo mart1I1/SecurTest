@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.test.security;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
